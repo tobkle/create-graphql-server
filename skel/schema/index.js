@@ -1,4 +1,5 @@
 import fs from 'fs';
+import { buildRequiredTypes } from 'create-graphql-server-query-arguments';
 
 function requireGraphQL(name) {
   const filename = require.resolve(name);
@@ -20,5 +21,7 @@ const typeDefs = [`
     __placeholder: Int
   }
 `];
+
+typeDefs.push(buildRequiredTypes());
 
 export default typeDefs;

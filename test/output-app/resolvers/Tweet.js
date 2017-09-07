@@ -27,8 +27,8 @@ const resolvers = {
     }
   },
   Query: {
-    tweets(root, { lastCreatedAt, limit }, { Tweet, me }) {
-      return Tweet.find({ lastCreatedAt, limit }, me, 'tweets');
+    tweets(root, args, { Tweet, me }) {
+      return Tweet.find(args, me, 'tweets');
     },
 
     tweet(root, { id }, { Tweet, me }) {

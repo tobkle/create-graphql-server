@@ -18,11 +18,14 @@ export default class {{TypeName}} {
     return await this.loader.load(id);
   }
 
-  find({ lastCreatedAt = 0, limit = 10, baseQuery = {} }) {
-    const finalQuery = { ...baseQuery, createdAt: { $gt: lastCreatedAt } };
+  find(args) {
+    const { baseQuery, sortQuery, skip, limit} = this.context.prepareQueries( args );
+    const finalQuery = { ...baseQuery };
+    this.context.log.debug(`\n\n${resolver} DB-Query:\n\n`, JSON.stringify(finalQuery, null, 2), '\nsort:', sortQuery,'\nskip:', skip, '\nlimit:', limit, '\n','\n');
     return this.collection
       .find(finalQuery)
-      .sort({ createdAt: 1 })
+      .sort(sortQuery)
+      .skip(skip)
       .limit(limit)
       .toArray();
   }

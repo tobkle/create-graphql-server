@@ -6,18 +6,18 @@ import {
   checkAuthDoc
 } from 'create-graphql-server-authorization';
 
-export default class Tweet {
+export default class {{TypeName}} {
   constructor(context) {
     this.context = context;
-    this.collection = context.db.collection('tweet');
+    this.collection = context.db.collection('{{typeName}}');
     this.pubsub = context.pubsub;
-    const { me, User } = context;
+    const { me, {{User}} } = context;
     queryForRoles(
       me,
-      ['admin', 'world'],
-      ['authorId', 'coauthorsIds'],
-      { User },
-      onAuthRegisterLoader('tweet findOneById', 'readOne', me, this)
+      {{{userRoles.readOne}}},
+      {{{docRoles.readOne}}},
+      { {{User}} },
+      onAuthRegisterLoader('{{typeName}} findOneById', 'readOne', me, this)
     );
   }
 
@@ -34,9 +34,9 @@ export default class Tweet {
     const { baseQuery, sortQuery, skip, limit} = this.context.prepareQueries( args );
     const authQuery = queryForRoles(
       me,
-      ['admin', 'world'],
-      ['authorId', 'coauthorsIds'],
-      { User: this.context.User },
+      {{{userRoles.readMany}}},
+      {{{docRoles.readMany}}},
+      { {{User}}: this.context.{{User}} },
       authlog(resolver, 'readMany', me)
     );
     const finalQuery = { ...baseQuery, ...authQuery };
@@ -48,39 +48,19 @@ export default class Tweet {
       .limit(limit)
       .toArray();
   }
+{{#each singularFields}}
+{{> defaultSingularField }}
+{{/each}}
+{{#each paginatedFields}}
+{{> defaultPaginatedField }}
+{{/each}}
 
-  author(tweet, me, resolver) {
-    return this.context.User.findOneById(
-      tweet.authorId,
-      me,
-      resolver
-    );
+  createdBy({{typeName}}, me, resolver) {
+    return this.context.{{User}}.findOneById({{typeName}}.createdById, me, resolver);
   }
 
-  coauthors(tweet, { lastCreatedAt = 0, limit = 10 }, me, resolver) {
-    const baseQuery = { _id: { $in: tweet.coauthorsIds || [] } };
-    return this.context.User.find(
-      { baseQuery, lastCreatedAt, limit },
-      me,
-      resolver
-    );
-  }
-
-  likers(tweet, { lastCreatedAt = 0, limit = 10 }, me, resolver) {
-    const baseQuery = { likedIds: tweet._id };
-    return this.context.User.find(
-      { baseQuery, lastCreatedAt, limit },
-      me,
-      resolver
-    );
-  }
-
-  createdBy(tweet, me, resolver) {
-    return this.context.User.findOneById(tweet.createdById, me, resolver);
-  }
-
-  updatedBy(tweet, me, resolver) {
-    return this.context.User.findOneById(tweet.updatedById, me, resolver);
+  updatedBy({{typeName}}, me, resolver) {
+    return this.context.{{User}}.findOneById({{typeName}}.updatedById, me, resolver);
   }
 
   async insert(doc, me, resolver) {
@@ -93,18 +73,18 @@ export default class Tweet {
     checkAuthDoc(
       docToInsert,
       me,
-      ['admin'],
-      ['authorId'],
-      { User: this.context.User },
+      {{{userRoles.create}}},
+      {{{docRoles.create}}},
+      { {{User}}: this.context.{{User}} },
       authlog(resolver, 'create', me)
     );
     const id = (await this.collection.insertOne(docToInsert)).insertedId;
     if (!id) {
-      throw new Error(`insert tweet not possible.`);
+      throw new Error(`insert {{typeName}} not possible.`);
     }
-    this.context.log.debug(`inserted tweet ${id}.`);
-    const insertedDoc = this.findOneById(id, me, 'pubsub tweetInserted');
-    this.pubsub.publish('tweetInserted', insertedDoc);
+    this.context.log.debug(`inserted {{typeName}} ${id}.`);
+    const insertedDoc = this.findOneById(id, me, 'pubsub {{typeName}}Inserted');
+    this.pubsub.publish('{{typeName}}Inserted', insertedDoc);
     return insertedDoc;
   }
 
@@ -118,20 +98,20 @@ export default class Tweet {
     const baseQuery = { _id: id };
     const authQuery = queryForRoles(
       me,
-      ['admin'],
-      ['authorId', 'coauthorsIds'],
-      { User: this.context.User },
+      {{{userRoles.update}}},
+      {{{docRoles.update}}},
+      { {{User}}: this.context.{{User}} },
       authlog(resolver, 'update', me)
     );
     const finalQuery = { ...baseQuery, ...authQuery };
     const result = await this.collection.updateOne(finalQuery, docToUpdate);
     if (result.result.ok !== 1 || result.result.n !== 1) {
-      throw new Error(`update tweet not possible for ${id}.`);
+      throw new Error(`update {{typeName}} not possible for ${id}.`);
     }
-    this.context.log.debug(`updated tweet ${id}.`);
+    this.context.log.debug(`updated {{typeName}} ${id}.`);
     this.authorizedLoader.clear(id);
-    const updatedDoc = this.findOneById(id, me, 'pubsub tweetUpdated');
-    this.pubsub.publish('tweetUpdated', updatedDoc);
+    const updatedDoc = this.findOneById(id, me, 'pubsub {{typeName}}Updated');
+    this.pubsub.publish('{{typeName}}Updated', updatedDoc);
     return updatedDoc;
   }
 
@@ -139,19 +119,19 @@ export default class Tweet {
     const baseQuery = { _id: id };
     const authQuery = queryForRoles(
       me,
-      ['admin'],
-      ['authorId'],
-      { User: this.context.User },
+      {{{userRoles.delete}}},
+      {{{docRoles.delete}}},
+      { {{User}}: this.context.{{User}} },
       authlog(resolver, 'delete', me)
     );
     const finalQuery = { ...baseQuery, ...authQuery };
     const result = await this.collection.remove(finalQuery);
     if (result.result.ok !== 1 || result.result.n !== 1) {
-      throw new Error(`remove tweet not possible for ${id}.`);
+      throw new Error(`remove {{typeName}} not possible for ${id}.`);
     }
-    this.context.log.debug(`removed tweet ${id}.`);
+    this.context.log.debug(`removed {{typeName}} ${id}.`);
     this.authorizedLoader.clear(id);
-    this.pubsub.publish('tweetRemoved', id);
+    this.pubsub.publish('{{typeName}}Removed', id);
     return result;
   }
 }

@@ -31,8 +31,8 @@ const resolvers = {
     }
   },
   Query: {
-    users(root, { lastCreatedAt, limit }, { User, me }) {
-      return User.find({ lastCreatedAt, limit }, me, 'users');
+    users(root, args, { User, me }) {
+      return User.find(args, me, 'users');
     },
 
     user(root, { id }, { User, me }) {

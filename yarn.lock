@@ -1189,6 +1189,23 @@ create-graphql-server-logging@^0.0.3:
     chai-subset "^1.6.0"
     winston "^2.3.1"
 
+create-graphql-server-query-arguments@^0.0.13:
+  version "0.0.13"
+  resolved "https://registry.yarnpkg.com/create-graphql-server-query-arguments/-/create-graphql-server-query-arguments-0.0.13.tgz#6c1eb3fea879c9f85540a8f1a0d983ce8729c3aa"
+  dependencies:
+    global "^4.3.2"
+    graphql "^0.11.2"
+    iterall "^1.1.0"
+    jwt-simple "^0.5.1"
+    lodash "4.16.4"
+    lodash.clonedeep "^4.5.0"
+    lodash.includes "^4.3.0"
+    lodash.isarraylike "^4.2.0"
+    lodash.isobject "^3.0.2"
+    lodash.merge "^4.6.0"
+    mongodb "^2.2.31"
+    node-fetch "^1.7.2"
+
 cross-spawn@^5.1.0:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-5.1.0.tgz#e8bd0efee58fcff6f8f94510a0a554bbfa235449"
@@ -1813,6 +1830,12 @@ graphql@^0.11.1:
   dependencies:
     iterall "^1.1.0"
 
+graphql@^0.11.2:
+  version "0.11.3"
+  resolved "https://registry.yarnpkg.com/graphql/-/graphql-0.11.3.tgz#9934e2df28f17d397a85f83cb39d1d179bffef47"
+  dependencies:
+    iterall "^1.1.0"
+
 growl@1.9.2:
   version "1.9.2"
   resolved "https://registry.yarnpkg.com/growl/-/growl-1.9.2.tgz#0ea7743715db8d8de2c5ede1775e1b45ac85c02f"
@@ -2181,6 +2204,10 @@ jsx-ast-utils@^1.0.0, jsx-ast-utils@^1.3.1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/jsx-ast-utils/-/jsx-ast-utils-1.4.1.tgz#3867213e8dd79bf1e8f2300c0cfc1efb182c0df1"
 
+jwt-simple@^0.5.1:
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/jwt-simple/-/jwt-simple-0.5.1.tgz#79ea01891b61de6b68e13e67c0b4b5bda937b294"
+
 kind-of@^3.0.2:
   version "3.2.2"
   resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-3.2.2.tgz#31ea21a734bab9bbb0f32466d893aea51e4a3c64"
@@ -2276,6 +2303,14 @@ lodash.isarguments@^3.0.0:
 lodash.isarray@^3.0.0:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/lodash.isarray/-/lodash.isarray-3.0.4.tgz#79e4eb88c36a8122af86f844aa9bcd851b5fbb55"
+
+lodash.isarraylike@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/lodash.isarraylike/-/lodash.isarraylike-4.2.0.tgz#4623310ab318804b667ddc3619058137559400c4"
+
+lodash.isobject@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/lodash.isobject/-/lodash.isobject-3.0.2.tgz#3c8fb8d5b5bf4bf90ae06e14f2a530a4ed935e1d"
 
 lodash.keys@^3.0.0:
   version "3.1.2"
@@ -2463,7 +2498,7 @@ natural-compare@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
 
-node-fetch@^1.6.3:
+node-fetch@^1.6.3, node-fetch@^1.7.2:
   version "1.7.2"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-1.7.2.tgz#c54e9aac57e432875233525f3c891c4159ffefd7"
   dependencies:

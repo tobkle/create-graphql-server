@@ -2,6 +2,10 @@
 
 This is a simple scaffolding tool for GraphQL apps, built on MongoDB.
 
+This branch includes two enhancements:
+* [Authorization](https://github.com/tobkle/create-graphql-server-authorization)
+* [Query Arguments](https://github.com/tobkle/create-graphql-server-query-arguments)
+
 It consists of different commands:
 
 ```bash

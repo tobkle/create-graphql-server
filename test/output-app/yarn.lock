@@ -1322,6 +1322,23 @@ create-graphql-server-logging@^0.0.3:
     chai-subset "^1.6.0"
     winston "^2.3.1"
 
+create-graphql-server-query-arguments@^0.0.13:
+  version "0.0.13"
+  resolved "https://registry.yarnpkg.com/create-graphql-server-query-arguments/-/create-graphql-server-query-arguments-0.0.13.tgz#6c1eb3fea879c9f85540a8f1a0d983ce8729c3aa"
+  dependencies:
+    global "^4.3.2"
+    graphql "^0.11.2"
+    iterall "^1.1.0"
+    jwt-simple "^0.5.1"
+    lodash "4.16.4"
+    lodash.clonedeep "^4.5.0"
+    lodash.includes "^4.3.0"
+    lodash.isarraylike "^4.2.0"
+    lodash.isobject "^3.0.2"
+    lodash.merge "^4.6.0"
+    mongodb "^2.2.31"
+    node-fetch "^1.7.2"
+
 cryptiles@2.x.x:
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/cryptiles/-/cryptiles-2.0.5.tgz#3bdfecdc608147c1c67202fa291e7dca59eaa3b8"
@@ -2245,6 +2262,12 @@ graphql@^0.11.1:
   dependencies:
     iterall "^1.1.0"
 
+graphql@^0.11.2:
+  version "0.11.3"
+  resolved "https://registry.yarnpkg.com/graphql/-/graphql-0.11.3.tgz#9934e2df28f17d397a85f83cb39d1d179bffef47"
+  dependencies:
+    iterall "^1.1.0"
+
 growl@1.9.2:
   version "1.9.2"
   resolved "https://registry.yarnpkg.com/growl/-/growl-1.9.2.tgz#0ea7743715db8d8de2c5ede1775e1b45ac85c02f"
@@ -2901,6 +2924,10 @@ lodash.isarray@^3.0.0:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/lodash.isarray/-/lodash.isarray-3.0.4.tgz#79e4eb88c36a8122af86f844aa9bcd851b5fbb55"
 
+lodash.isarraylike@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/lodash.isarraylike/-/lodash.isarraylike-4.2.0.tgz#4623310ab318804b667ddc3619058137559400c4"
+
 lodash.isequal@^4.0.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.isequal/-/lodash.isequal-4.5.0.tgz#415c4478f2bcc30120c22ce10ed3226f7d3e18e0"
@@ -3173,7 +3200,7 @@ nested-error-stacks@^1.0.0:
   dependencies:
     inherits "~2.0.1"
 
-node-fetch@^1.6.3:
+node-fetch@^1.6.3, node-fetch@^1.7.2:
   version "1.7.2"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-1.7.2.tgz#c54e9aac57e432875233525f3c891c4159ffefd7"
   dependencies:

@@ -42,6 +42,7 @@
     "create-graphql-server-authorization": "^0.0.45",
     "create-graphql-server-find-by-ids": "^0.0.4",
     "create-graphql-server-logging": "^0.0.3",
+    "create-graphql-server-query-arguments": "^0.0.13",
     "dataloader": "^1.2.0",
     "denodeify": "^1.2.1",
     "dotenv": "2.0.0",

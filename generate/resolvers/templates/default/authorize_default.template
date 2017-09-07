@@ -11,6 +11,14 @@ const resolvers = {
 {{#each paginatedFields}}
 {{> defaultPaginatedField }}
 {{/each}}
+
+    createdBy({{typeName}}, args, { {{TypeName}}, me }) {
+      return {{TypeName}}.createdBy({{typeName}}, me, '{{typeName}} createdBy');
+    },
+
+    updatedBy({{typeName}}, args, { {{TypeName}}, me }) {
+      return {{TypeName}}.updatedBy({{typeName}}, me, '{{typeName}} updatedBy');
+    }
   },
   Query: {
     {{typeName}}s(root, args, { {{TypeName}}, me }) {

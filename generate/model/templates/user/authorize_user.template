@@ -9,24 +9,24 @@ import {
 import bcrypt from 'bcrypt';
 const SALT_ROUNDS = 10;
 
-export default class User {
+export default class {{TypeName}} {
   constructor(context) {
     this.context = context;
-    this.collection = context.db.collection('user');
+    this.collection = context.db.collection('{{typeName}}');
     this.pubsub = context.pubsub;
-    this.authRole = User.authRole;
+    this.authRole = {{User}}.authRole;
     const { me } = context;
     queryForRoles(
       me,
-      ['admin'],
-      ['_id'],
-      { User },
-      onAuthRegisterLoader('user findOneById', 'readOne', me, this)
+      {{{userRoles.readOne}}},
+      {{{docRoles.readOne}}},
+      { {{User}} },
+      onAuthRegisterLoader('{{typeName}} findOneById', 'readOne', me, this)
     );
   }
 
-  static authRole(user) {
-    return user && user.role ? user.role : null;
+  static authRole({{typeName}}) {
+    return {{typeName}} && {{typeName}}.{{roleField}} ? {{typeName}}.{{roleField}} : null;
   }
 
   async findOneById(id, me, resolver) {
@@ -42,9 +42,9 @@ export default class User {
     const { baseQuery, sortQuery, skip, limit} = this.context.prepareQueries( args );
     const authQuery = queryForRoles(
       me,
-      ['admin'],
-      ['_id'],
-      { User: this.context.User },
+      {{{userRoles.readMany}}},
+      {{{docRoles.readMany}}},
+      { {{User}}: this.context.{{User}} },
       authlog(resolver, 'readMany', me)
     );
     const finalQuery = { ...baseQuery, ...authQuery };
@@ -56,49 +56,19 @@ export default class User {
       .limit(limit)
       .toArray();
   }
+{{#each singularFields}}
+{{> defaultSingularField }}
+{{/each}}
+{{#each paginatedFields}}
+{{> defaultPaginatedField }}
+{{/each}}
 
-  tweets(user, { minLikes, lastCreatedAt = 0, limit = 10 }, me, resolver) {
-    const baseQuery = { authorId: user._id };
-    return this.context.Tweet.find(
-      { baseQuery, minLikes, lastCreatedAt, limit },
-      me,
-      resolver
-    );
+  createdBy({{typeName}}, me, resolver) {
+    return this.context.{{User}}.findOneById({{typeName}}.createdById, me, resolver);
   }
 
-  liked(user, { lastCreatedAt = 0, limit = 10 }, me, resolver) {
-    const baseQuery = { _id: { $in: user.likedIds || [] } };
-    return this.context.Tweet.find(
-      { baseQuery, lastCreatedAt, limit },
-      me,
-      resolver
-    );
-  }
-
-  following(user, { lastCreatedAt = 0, limit = 10 }, me, resolver) {
-    const baseQuery = { _id: { $in: user.followingIds || [] } };
-    return this.context.User.find(
-      { baseQuery, lastCreatedAt, limit },
-      me,
-      resolver
-    );
-  }
-
-  followers(user, { lastCreatedAt = 0, limit = 10 }, me, resolver) {
-    const baseQuery = { followingIds: user._id };
-    return this.context.User.find(
-      { baseQuery, lastCreatedAt, limit },
-      me,
-      resolver
-    );
-  }
-
-  createdBy(user, me, resolver) {
-    return this.context.User.findOneById(user.createdById, me, resolver);
-  }
-
-  updatedBy(user, me, resolver) {
-    return this.context.User.findOneById(user.updatedById, me, resolver);
+  updatedBy({{typeName}}, me, resolver) {
+    return this.context.{{User}}.findOneById({{typeName}}.updatedById, me, resolver);
   }
 
   async insert(doc, me, resolver) {
@@ -115,21 +85,21 @@ export default class User {
     checkAuthDoc(
       docToInsert,
       me,
-      ['admin'],
-      ['_id'],
-      { User: this.context.User },
+      {{{userRoles.create}}},
+      {{{docRoles.create}}},
+      { {{User}}: this.context.{{User}} },
       authlog(resolver, 'create', me)
     );
-    docToInsert = protectFields(me, ['admin'], ['role'], docToInsert, {
-      User: this.context.User
+    docToInsert = protectFields(me, [{{#if firstUserRole}}'{{firstUserRole}}'{{/if}}], [{{#if roleField}}'{{roleField}}'{{/if}}], docToInsert, {
+      {{User}}: this.context.{{User}}
     });
     const id = (await this.collection.insertOne(docToInsert)).insertedId;
     if (!id) {
-      throw new Error(`insert user not possible.`);
+      throw new Error(`insert {{typeName}} not possible.`);
     }
-    this.context.log.debug(`inserted user ${id}.`);
-    const insertedDoc = this.findOneById(id, me, 'pubsub userInserted');
-    this.pubsub.publish('userInserted', insertedDoc);
+    this.context.log.debug(`inserted {{typeName}} ${id}.`);
+    const insertedDoc = this.findOneById(id, me, 'pubsub {{typeName}}Inserted');
+    this.pubsub.publish('{{typeName}}Inserted', insertedDoc);
     return insertedDoc;
   }
 
@@ -143,27 +113,27 @@ export default class User {
     const baseQuery = { _id: id };
     const authQuery = queryForRoles(
       me,
-      ['admin'],
-      ['_id'],
-      { User: this.context.User },
+      {{{userRoles.update}}},
+      {{{docRoles.update}}},
+      { {{User}}: this.context.{{User}} },
       authlog(resolver, 'update', me)
     );
     docToUpdate.$set = protectFields(
       me,
-      ['admin'],
-      ['role'],
+      [{{#if firstUserRole}}'{{firstUserRole}}'{{/if}}],
+      [{{#if roleField}}'{{roleField}}'{{/if}}],
       docToUpdate.$set,
-      { User: this.context.User }
+      { {{User}}: this.context.{{User}} }
     );
     const finalQuery = { ...baseQuery, ...authQuery };
     const result = await this.collection.updateOne(finalQuery, docToUpdate);
     if (result.result.ok !== 1 || result.result.n !== 1) {
-      throw new Error(`update user not possible for ${id}.`);
+      throw new Error(`update {{typeName}} not possible for ${id}.`);
     }
-    this.context.log.debug(`updated user ${id}.`);
+    this.context.log.debug(`updated {{typeName}} ${id}.`);
     this.authorizedLoader.clear(id);
-    const updatedDoc = this.findOneById(id, me, 'pubsub userUpdated');
-    this.pubsub.publish('userUpdated', updatedDoc);
+    const updatedDoc = this.findOneById(id, me, 'pubsub {{typeName}}Updated');
+    this.pubsub.publish('{{typeName}}Updated', updatedDoc);
     return updatedDoc;
   }
 
@@ -171,19 +141,19 @@ export default class User {
     const baseQuery = { _id: id };
     const authQuery = queryForRoles(
       me,
-      ['admin'],
-      ['_id'],
-      { User: this.context.User },
+      {{{userRoles.delete}}},
+      {{{docRoles.delete}}},
+      { {{User}}: this.context.{{User}} },
       authlog(resolver, 'delete', me)
     );
     const finalQuery = { ...baseQuery, ...authQuery };
     const result = await this.collection.remove(finalQuery);
     if (result.result.ok !== 1 || result.result.n !== 1) {
-      throw new Error(`remove user not possible for ${id}.`);
+      throw new Error(`remove {{typeName}} not possible for ${id}.`);
     }
-    this.context.log.debug(`removed user ${id}.`);
+    this.context.log.debug(`removed {{typeName}} ${id}.`);
     this.authorizedLoader.clear(id);
-    this.pubsub.publish('userRemoved', id);
+    this.pubsub.publish('{{typeName}}Removed', id);
     return result;
   }
 }

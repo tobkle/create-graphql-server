@@ -6,6 +6,10 @@ import {
   enhanceSchemaForAuthorization
 } from 'create-graphql-server-authorization';
 
+import { 
+  enhanceSchemaWithQueryArguments 
+} from 'create-graphql-server-query-arguments';
+
 import {
   buildField,
   buildTypeExtension,
@@ -150,6 +154,7 @@ export default function generateSchema(inputSchema) {
 
   // enhance with Authorization
   const outputSchemaWithAuth = enhanceSchemaForAuthorization(outputSchema);
-
-  return outputSchemaWithAuth;
+  const outputSchemaWithArguments = enhanceSchemaWithQueryArguments(outputSchemaWithAuth);
+  
+  return outputSchemaWithArguments;
 }

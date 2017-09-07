@@ -40,19 +40,28 @@ describe('test-2: queries as user with role "admin"', () => {
       }
 
       let lastCreatedAt;
-      return sendQuery({ query: constructQuery(), userId: adminUser })
+      return sendQuery(               /* 1 */
+            { query: constructQuery(), userId: adminUser
+          })
         .then((result) => {
           const items = checkResult(result, 0, expectedItems.length);
-          lastCreatedAt = items[0].createdAt;
+          lastCreatedAt = items[0].createdAt;  // => take first createdAt
         })
-        .then(() => sendQuery({ query: constructQuery('(limit: 1)'), userId: adminUser }))
-        .then(result => checkResult(result, 0, 1))
-        .then(() => sendQuery({
+
+        .then(() => sendQuery(         /* 2  */
+            { query: constructQuery('(limit: 1)'), userId: adminUser 
+          }))
+        .then(result => 
+          checkResult(result, 0, 1))
+
+        .then(() => sendQuery({         /* 3 */
           query: constructQuery(`(lastCreatedAt: ${lastCreatedAt})`),
           userId: adminUser,
         }))
-        .then(result => checkResult(result, 1, expectedItems.length - 1))
-        .then(() => sendQuery({
+        .then(result => 
+          checkResult(result, 1, expectedItems.length - 1))
+
+        .then(() => sendQuery({          /* 4 */
           query: constructQuery(`(lastCreatedAt: ${lastCreatedAt}, limit: 1)`),
           userId: adminUser,
         }))
