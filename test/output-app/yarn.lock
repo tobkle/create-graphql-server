@@ -1322,9 +1322,9 @@ create-graphql-server-logging@^0.0.3:
     chai-subset "^1.6.0"
     winston "^2.3.1"
 
-create-graphql-server-query-arguments@^0.0.13:
-  version "0.0.13"
-  resolved "https://registry.yarnpkg.com/create-graphql-server-query-arguments/-/create-graphql-server-query-arguments-0.0.13.tgz#6c1eb3fea879c9f85540a8f1a0d983ce8729c3aa"
+create-graphql-server-query-arguments@^0.0.15:
+  version "0.0.15"
+  resolved "https://registry.yarnpkg.com/create-graphql-server-query-arguments/-/create-graphql-server-query-arguments-0.0.15.tgz#516fbfd34e7e05c7c9d36aa492ae09e9783643a7"
   dependencies:
     global "^4.3.2"
     graphql "^0.11.2"
