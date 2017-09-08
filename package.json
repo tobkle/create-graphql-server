@@ -22,7 +22,7 @@
     "clean": "rm -rf dist/*",
     "build": "npm run clean && babel bin --out-dir dist/bin && babel generate -D --out-dir dist/generate && cp -r skel dist",
     "prepublish": "npm run build",
-    "gentest": "babel-node bin/gentest.js -- "
+    "gentest": "babel-node --inspect bin/gentest.js -- "
   },
   "config": {
     "logfile": "log/all-logs-readable.log",

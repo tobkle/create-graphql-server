@@ -100,38 +100,27 @@ function edgesToReturn(allEdges, args) {
 
   let edges = applyCursorsToEdges(allEdges, before, after);
 
-  // if (first && last) throw new Error('Pagination: <first> and <last> can not be combined.');
+  if (first && last) throw new Error('Pagination: <first> and <last> can not be combined.');
 
   if (first) {
-    // if (first < 0) throw new Error('Pagination: <first> must be greater 0');
+    if (first < 0) throw new Error('Pagination: <first> must be greater 0');
     if (edges.length > first) {
       edges = edges.slice(0, first);
     }
   }
 
   if (last) {
-    // if (last < 0) throw new Error('Pagination: <last> must be greater 0');
+    if (last < 0) throw new Error('Pagination: <last> must be greater 0');
     if (edges.length > last) {
       edges = edges.slice(-last);
     }
   }
-  console.log('Edges: \n', JSON.stringify(edges, null, 2));
 
   return edges.map(edge => ({
     node: edge,
     cursor: edge._id
   }));
 
-  // return [
-  //     { 
-  //       node: { username: "tobias" },
-  //       cursor: "cursor1"
-  //     },
-  //     { 
-  //       node: { username: "tanja" },
-  //       cursor: "cursor2"
-  //     },
-  //   ];
 }
 
 /**
@@ -146,7 +135,7 @@ function edgesToReturn(allEdges, args) {
 function applyCursorsToEdges(allEdges, before, after) {
   let edges = allEdges;
 
-  // if (before && after) throw new Error('Pagination: <before> and <after> can not be combined.');
+  if (before && after) throw new Error('Pagination: <before> and <after> can not be combined.');
 
   if (after) {
     let cursorIndex = null;
@@ -218,15 +207,15 @@ function hasPreviousPage(allEdges, args) {
   */
 
 function hasNextPage(allEdges, args) {
- const { first, before, after } = args;
+  const { first, before, after } = args;
 
- if (!first) return false;
+  if (!first) return false;
 
- const edges = applyCursorsToEdges(allEdges, before, after);
- 
- if (edges.length > first) return true;
+  const edges = applyCursorsToEdges(allEdges, before, after);
 
- return false;
+  if (edges.length > first) return true;
+
+  return false;
 }
 
 

@@ -83502,3 +83502,328 @@ limit: 10
 2017-09-08 01:15:45  Authorize readMany 'user liked' with user '<no-user>' and role '<no-role>' is authorized
 2017-09-08 01:15:45  Authorize readMany 'user tweets' with user '<no-user>' and role '<no-role>' is authorized
 2017-09-08 01:15:45  Authorize readMany 'user tweetsConnection' with user '<no-user>' and role '<no-role>' is authorized
+2017-09-08 08:57:58  Logger started
+2017-09-08 08:58:02  --------------------------------------------------------------------------------
+2017-09-08 08:58:02  Request:
+User: "<no-user>", role: "<no-role>", id: "<no-id>",
+Operation: "<no-name>", variables: "<no-variables>",
+Query:
+query IntrospectionQuery {
+  __schema {
+    queryType {
+      name
+    }
+    mutationType {
+      name
+    }
+    subscriptionType {
+      name
+    }
+    types {
+      ...FullType
+    }
+    directives {
+      name
+      description
+      locations
+      args {
+        ...InputValue
+      }
+    }
+  }
+}
+
+fragment FullType on __Type {
+  kind
+  name
+  description
+  fields(includeDeprecated: true) {
+    name
+    description
+    args {
+      ...InputValue
+    }
+    type {
+      ...TypeRef
+    }
+    isDeprecated
+    deprecationReason
+  }
+  inputFields {
+    ...InputValue
+  }
+  interfaces {
+    ...TypeRef
+  }
+  enumValues(includeDeprecated: true) {
+    name
+    description
+    isDeprecated
+    deprecationReason
+  }
+  possibleTypes {
+    ...TypeRef
+  }
+}
+
+fragment InputValue on __InputValue {
+  name
+  description
+  type {
+    ...TypeRef
+  }
+  defaultValue
+}
+
+fragment TypeRef on __Type {
+  kind
+  name
+  ofType {
+    kind
+    name
+    ofType {
+      kind
+      name
+      ofType {
+        kind
+        name
+        ofType {
+          kind
+          name
+          ofType {
+            kind
+            name
+            ofType {
+              kind
+              name
+              ofType {
+                kind
+                name
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+2017-09-08 08:58:02  ERROR Authorize readOne 'user findOneById' with user '<no-user>' and role: 'null' is not authorized.
+2017-09-08 08:58:02  Authorize readOne 'tweet findOneById' with user '<no-user>' and role '<no-role>' is authorized
+2017-09-08 08:58:02  registered authorizedLoader successfully
+2017-09-08 08:58:04  --------------------------------------------------------------------------------
+2017-09-08 08:58:04  Request:
+User: "<no-user>", role: "<no-role>", id: "<no-id>",
+Operation: "<no-name>", variables: "{}",
+Query:
+{
+  users {
+    username
+    liked(filter: {body_starts_with: "Good"}) {
+      id
+      body
+    }
+    tweets(filter: {body_contains: "Help"}) {
+      id
+      body
+    }
+    tweetsConnection {
+      edges {
+        cursor
+        node {
+          id
+          body
+        }
+      }
+      pageInfo {
+        hasPreviousPage
+        hasNextPage
+      }
+    }
+  }
+}
+
+2017-09-08 08:58:04  
+
+users Arguments:
+
+ {}
+2017-09-08 08:58:04  
+
+users DB-Query:
+
+ {
+  "createdAt": {
+    "$gt": 0
+  }
+} 
+sort: { createdAt: 1 } 
+skip: 0 
+limit: 10 
+ 
+
+2017-09-08 08:58:04  ERROR Authorize readOne 'user findOneById' with user '<no-user>' and role: 'null' is not authorized.
+2017-09-08 08:58:04  Authorize readOne 'tweet findOneById' with user '<no-user>' and role '<no-role>' is authorized
+2017-09-08 08:58:04  Authorize readMany 'users' with user '<no-user>' and role '<no-role>' is authorized
+2017-09-08 08:58:04  registered authorizedLoader successfully
+2017-09-08 08:58:04  
+
+user liked DB-Query:
+
+ {
+  "_id": {
+    "$in": [
+      "583676d3618530145474e352",
+      "583676d3618530145474e353",
+      "583676d3618530145474e354"
+    ]
+  },
+  "createdAt": {
+    "$gt": 0
+  }
+} 
+sort: { createdAt: 1 } 
+skip: 0 
+limit: 10 
+ 
+
+2017-09-08 08:58:04  
+
+user tweets DB-Query:
+
+ {
+  "authorId": "583291a1638566b3c5a92ca0",
+  "createdAt": {
+    "$gt": 0
+  }
+} 
+sort: { createdAt: 1 } 
+skip: 0 
+limit: 10 
+ 
+
+2017-09-08 08:58:04  
+
+user tweetsConnection DB-Query:
+
+ {
+  "authorId": "583291a1638566b3c5a92ca0",
+  "createdAt": {
+    "$gt": 0
+  }
+} 
+sort: { createdAt: 1 } 
+skip: 0 
+limit: 10 
+ 
+
+2017-09-08 08:58:04  
+
+user liked DB-Query:
+
+ {
+  "_id": {
+    "$in": [
+      "583676d3618530145474e350",
+      "583676d3618530145474e351"
+    ]
+  },
+  "createdAt": {
+    "$gt": 0
+  }
+} 
+sort: { createdAt: 1 } 
+skip: 0 
+limit: 10 
+ 
+
+2017-09-08 08:58:04  
+
+user tweets DB-Query:
+
+ {
+  "authorId": "583291a1638566b3c5a92ca1",
+  "createdAt": {
+    "$gt": 0
+  }
+} 
+sort: { createdAt: 1 } 
+skip: 0 
+limit: 10 
+ 
+
+2017-09-08 08:58:04  
+
+user tweetsConnection DB-Query:
+
+ {
+  "authorId": "583291a1638566b3c5a92ca1",
+  "createdAt": {
+    "$gt": 0
+  }
+} 
+sort: { createdAt: 1 } 
+skip: 0 
+limit: 10 
+ 
+
+2017-09-08 08:58:04  
+
+user liked DB-Query:
+
+ {
+  "_id": {
+    "$in": [
+      "583676d3618530145474e350",
+      "583676d3618530145474e353"
+    ]
+  },
+  "createdAt": {
+    "$gt": 0
+  }
+} 
+sort: { createdAt: 1 } 
+skip: 0 
+limit: 10 
+ 
+
+2017-09-08 08:58:04  
+
+user tweets DB-Query:
+
+ {
+  "authorId": "583291a1638566b3c5a92ca2",
+  "createdAt": {
+    "$gt": 0
+  }
+} 
+sort: { createdAt: 1 } 
+skip: 0 
+limit: 10 
+ 
+
+2017-09-08 08:58:04  
+
+user tweetsConnection DB-Query:
+
+ {
+  "authorId": "583291a1638566b3c5a92ca2",
+  "createdAt": {
+    "$gt": 0
+  }
+} 
+sort: { createdAt: 1 } 
+skip: 0 
+limit: 10 
+ 
+
+2017-09-08 08:58:04  Authorize readMany 'user liked' with user '<no-user>' and role '<no-role>' is authorized
+2017-09-08 08:58:04  Authorize readMany 'user tweets' with user '<no-user>' and role '<no-role>' is authorized
+2017-09-08 08:58:04  Authorize readMany 'user tweetsConnection' with user '<no-user>' and role '<no-role>' is authorized
+2017-09-08 08:58:04  Authorize readMany 'user liked' with user '<no-user>' and role '<no-role>' is authorized
+2017-09-08 08:58:04  Authorize readMany 'user tweets' with user '<no-user>' and role '<no-role>' is authorized
+2017-09-08 08:58:04  Authorize readMany 'user tweetsConnection' with user '<no-user>' and role '<no-role>' is authorized
+2017-09-08 08:58:04  Authorize readMany 'user liked' with user '<no-user>' and role '<no-role>' is authorized
+2017-09-08 08:58:04  Authorize readMany 'user tweets' with user '<no-user>' and role '<no-role>' is authorized
+2017-09-08 08:58:04  Authorize readMany 'user tweetsConnection' with user '<no-user>' and role '<no-role>' is authorized
+2017-09-08 08:59:28  Logger started

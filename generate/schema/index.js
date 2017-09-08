@@ -6,9 +6,12 @@ import {
   enhanceSchemaForAuthorization
 } from 'create-graphql-server-authorization';
 
+// import { 
+//   enhanceSchemaWithQueryArguments 
+// } from 'create-graphql-server-query-arguments';
 import { 
   enhanceSchemaWithQueryArguments 
-} from 'create-graphql-server-query-arguments';
+} from '/Users/Toby/MICRO/create-graphql-server-query-arguments/src/schema';
 
 import {
   buildField,
