@@ -1,18 +1,40 @@
-type User {
+type User implements Node {
   id: ObjID!
   role: String
   email: String!
   username: String
   bio: String
   notify: Boolean
-  tweets(minLikes: Int, lastCreatedAt: Float, limit: Int): [Tweet]
-  liked(lastCreatedAt: Float, limit: Int): [Tweet]
-  following(lastCreatedAt: Float, limit: Int): [User]
-  followers(lastCreatedAt: Float, limit: Int): [User]
+  tweets(minLikes: Int, lastCreatedAt: Float, limit: Int, filter: TweetFilter, orderBy: [TweetOrderBy!]): [Tweet]
+  liked(lastCreatedAt: Float, limit: Int, filter: TweetFilter, orderBy: [TweetOrderBy!]): [Tweet]
+  following(lastCreatedAt: Float, limit: Int, filter: UserFilter, orderBy: [UserOrderBy!]): [User]
+  followers(lastCreatedAt: Float, limit: Int, filter: UserFilter, orderBy: [UserOrderBy!]): [User]
   createdAt: Float!
   updatedAt: Float!
   createdBy: User
   updatedBy: User
+  friendsConnection(first: Int, after: String, last: Int, before: String): UserFriendsConnection
+  tweetsConnection(first: Int, after: String, last: Int, before: String): UserTweetsConnection
+}
+
+type UserFriendsEdge implements Edge {
+  cursor: String!
+  node: User
+}
+
+type UserFriendsConnection implements Connection {
+  edges: [UserFriendsEdge]
+  pageInfo: PageInfo!
+}
+
+type UserTweetEdge implements Edge {
+  cursor: String!
+  node: Tweet
+}
+
+type UserTweetsConnection implements Connection {
+  edges: [UserTweetEdge]
+  pageInfo: PageInfo!
 }
 
 extend type Query {

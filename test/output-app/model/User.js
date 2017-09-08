@@ -39,10 +39,11 @@ export default class User {
   }
 
   find(args, me, resolver) {
+    this.context.log.debug(`\n\n${resolver} Arguments:\n\n`, JSON.stringify(args, null, 2));
     const { baseQuery, sortQuery, skip, limit} = this.context.prepareQueries( args );
     const authQuery = queryForRoles(
       me,
-      ['admin'],
+      ['admin', 'world'],
       ['_id'],
       { User: this.context.User },
       authlog(resolver, 'readMany', me)

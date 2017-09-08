@@ -22,6 +22,19 @@ resolvers.ObjID = new GraphQLScalarType({
   },
 });
 
+// PAGEINFO =====================
+resolvers.PageInfo = {
+  
+  hasPreviousPage(pageInfo, args, { PageInfo, me }) {
+    return pageInfo.hasPreviousPage;
+  },
+
+  hasNextPage(pageInfo, args, { PageInfo, me }) {
+    return pageInfo.hasNextPage;
+  }
+}
+// PAGEINFO ======================
+
 export default resolvers;
 
 import tweetResolvers from './Tweet';

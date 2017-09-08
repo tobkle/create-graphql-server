@@ -1,4 +1,4 @@
-type Tweet {
+type Tweet implements Node {
   id: ObjID!
   author: User
   coauthors(lastCreatedAt: Float, limit: Int): [User]
