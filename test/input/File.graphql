@@ -1,0 +1,25 @@
+type File
+
+@authorize(
+  admin: ["create", "read", "update", "delete"]
+  this: ["create", "read", "update", "delete"]
+)
+
+{
+  id: ObjID!
+  originalname: String
+  name: String
+  mimetype: String
+  path: String
+  contentType: String
+  secret: String
+  size: Int
+  updatedAt: Float
+  url: String
+  destination: String
+  encoding: String
+  createdAt: Float
+  updatedAt: Float
+  createdBy: User
+  updatedBy: User
+}
