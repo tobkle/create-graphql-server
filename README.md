@@ -5,6 +5,7 @@ This is a simple scaffolding tool for GraphQL apps, built on MongoDB.
 This branch includes two enhancements:
 * [Authorization](https://github.com/tobkle/create-graphql-server-authorization)
 * [Query Arguments](https://github.com/tobkle/create-graphql-server-query-arguments)
+* [Relay-like Connections](https://github.com/tobkle/create-graphql-server-connections)
 
 It consists of different commands:
 
@@ -75,6 +76,8 @@ If the field references an array (again w/ or w/o nullability) of another type, 
 - `@belongsToMany` - there is a list of foreign keys stored on this type as `${fieldName}Ids` [this is the default]
 - `@hasMany` - the foreign key is on the referenced type as `${typeName}Id`. Provide the `"as": X` argument if the name is different. (this is the reverse of `@belongsTo` in a 1-many situation).
 - `@hasAndBelongsToMany` - the foreign key on the referenced type as `${typeName}Ids`. Provide the `"as": X` argument if the name is different. (this is the reverse of `@belongsToMany` in a many-many situation).
+
+Use @paginate(by: "cursor") for cursor-based connection in relay-like style.
 
 ## Updating types
 
