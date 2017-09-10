@@ -5,40 +5,22 @@ type User implements Node {
   username: String
   bio: String
   notify: Boolean
-  tweets(minLikes: Int, lastCreatedAt: Float, limit: Int, filter: TweetFilter, orderBy: [TweetOrderBy!]): [Tweet]
-  liked(lastCreatedAt: Float, limit: Int, filter: TweetFilter, orderBy: [TweetOrderBy!]): [Tweet]
-  following(lastCreatedAt: Float, limit: Int, filter: UserFilter, orderBy: [UserOrderBy!]): [User]
-  followers(lastCreatedAt: Float, limit: Int, filter: UserFilter, orderBy: [UserOrderBy!]): [User]
+  tweets(minLikes: Int, lastCreatedAt: Float, limit: Int, skip: Int, filter: TweetFilter, orderBy: [TweetOrderBy!]): [Tweet]
+  liked(lastCreatedAt: Float, limit: Int, skip: Int, filter: TweetFilter, orderBy: [TweetOrderBy!]): [Tweet]
+  following(lastCreatedAt: Float, limit: Int, skip: Int, filter: UserFilter, orderBy: [UserOrderBy!]): [User]
+  followers(lastCreatedAt: Float, limit: Int, skip: Int, filter: UserFilter, orderBy: [UserOrderBy!]): [User]
   createdAt: Float!
   updatedAt: Float!
   createdBy: User
   updatedBy: User
-  friendsConnection(first: Int, after: String, last: Int, before: String): UserFriendsConnection
-  tweetsConnection(first: Int, after: String, last: Int, before: String): UserTweetsConnection
-}
-
-type UserFriendsEdge implements Edge {
-  cursor: String!
-  node: User
-}
-
-type UserFriendsConnection implements Connection {
-  edges: [UserFriendsEdge]
-  pageInfo: PageInfo!
-}
-
-type UserTweetEdge implements Edge {
-  cursor: String!
-  node: Tweet
-}
-
-type UserTweetsConnection implements Connection {
-  edges: [UserTweetEdge]
-  pageInfo: PageInfo!
+  tweetsConnection(minLikes: Int, filter: TweetFilter, orderBy: [TweetOrderBy!], first: Int, last: Int, before: Float, after: Float): UserTweetsConnection
+  likedConnection(filter: TweetFilter, orderBy: [TweetOrderBy!], first: Int, last: Int, before: Float, after: Float): UserTweetsConnection
+  followingConnection(filter: UserFilter, orderBy: [UserOrderBy!], first: Int, last: Int, before: Float, after: Float): UserUsersConnection
+  followersConnection(filter: UserFilter, orderBy: [UserOrderBy!], first: Int, last: Int, before: Float, after: Float): UserUsersConnection
 }
 
 extend type Query {
-  users(lastCreatedAt: Float, limit: Int, skip: Int, filter: UserFilter, orderBy: [UserOrderBy!]): [User!]
+  users(lastCreatedAt: Float, limit: Int, skip: Int, filter: UserFilter, orderBy: [UserOrderBy!], first: Int, last: Int, before: Float, after: Float): [User!]
   user(id: ObjID!): User
 }
 
@@ -251,4 +233,24 @@ enum UserSort {
 input UserOrderBy {
   sort: UserSort!
   direction: Direction = ASC
+}
+
+type UserTweetsEdge {
+  cursor: Float!
+  node: Tweet
+}
+
+type UserUsersEdge {
+  cursor: Float!
+  node: User
+}
+
+type UserTweetsConnection {
+  edges: [UserTweetsEdge]
+  pageInfo: PageInfo!
+}
+
+type UserUsersConnection {
+  edges: [UserUsersEdge]
+  pageInfo: PageInfo!
 }

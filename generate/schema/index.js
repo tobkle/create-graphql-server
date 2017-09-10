@@ -6,12 +6,13 @@ import {
   enhanceSchemaForAuthorization
 } from 'create-graphql-server-authorization';
 
-// import { 
-//   enhanceSchemaWithQueryArguments 
-// } from 'create-graphql-server-query-arguments';
 import { 
   enhanceSchemaWithQueryArguments 
-} from '/Users/Toby/MICRO/create-graphql-server-query-arguments/src/schema';
+} from 'create-graphql-server-query-arguments';
+
+import {
+  enhanceSchemaWithConnections
+} from 'create-graphql-server-connections';
 
 import {
   buildField,
@@ -158,6 +159,7 @@ export default function generateSchema(inputSchema) {
   // enhance with Authorization
   const outputSchemaWithAuth = enhanceSchemaForAuthorization(outputSchema);
   const outputSchemaWithArguments = enhanceSchemaWithQueryArguments(outputSchemaWithAuth);
-  
-  return outputSchemaWithArguments;
+  const outputSchemaWithConnections = enhanceSchemaWithConnections(outputSchemaWithArguments);
+
+  return outputSchemaWithConnections;
 }

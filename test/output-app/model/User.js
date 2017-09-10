@@ -39,11 +39,10 @@ export default class User {
   }
 
   find(args, me, resolver) {
-    this.context.log.debug(`\n\n${resolver} Arguments:\n\n`, JSON.stringify(args, null, 2));
     const { baseQuery, sortQuery, skip, limit} = this.context.prepareQueries( args );
     const authQuery = queryForRoles(
       me,
-      ['admin', 'world'],
+      ['admin'],
       ['_id'],
       { User: this.context.User },
       authlog(resolver, 'readMany', me)
@@ -58,40 +57,28 @@ export default class User {
       .toArray();
   }
 
-  tweets(user, { minLikes, lastCreatedAt = 0, limit = 10 }, me, resolver) {
+  tweets(user, args, me, resolver) {
     const baseQuery = { authorId: user._id };
-    return this.context.Tweet.find(
-      { baseQuery, minLikes, lastCreatedAt, limit },
-      me,
-      resolver
-    );
+    const finalQuery = { ...args, baseQuery};
+    return this.context.Tweet.find(finalQuery, me, resolver);
   }
 
-  liked(user, { lastCreatedAt = 0, limit = 10 }, me, resolver) {
+  liked(user, args, me, resolver) {
     const baseQuery = { _id: { $in: user.likedIds || [] } };
-    return this.context.Tweet.find(
-      { baseQuery, lastCreatedAt, limit },
-      me,
-      resolver
-    );
+    const finalQuery = { ...args, baseQuery};
+    return this.context.Tweet.find(finalQuery, me, resolver);
   }
 
-  following(user, { lastCreatedAt = 0, limit = 10 }, me, resolver) {
+  following(user, args, me, resolver) {
     const baseQuery = { _id: { $in: user.followingIds || [] } };
-    return this.context.User.find(
-      { baseQuery, lastCreatedAt, limit },
-      me,
-      resolver
-    );
+    const finalQuery = { ...args, baseQuery};
+    return this.context.User.find(finalQuery, me, resolver);
   }
 
-  followers(user, { lastCreatedAt = 0, limit = 10 }, me, resolver) {
+  followers(user, args, me, resolver) {
     const baseQuery = { followingIds: user._id };
-    return this.context.User.find(
-      { baseQuery, lastCreatedAt, limit },
-      me,
-      resolver
-    );
+    const finalQuery = { ...args, baseQuery};
+    return this.context.User.find(finalQuery, me, resolver);
   }
 
   createdBy(user, me, resolver) {

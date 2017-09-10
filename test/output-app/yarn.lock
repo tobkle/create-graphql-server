@@ -1285,9 +1285,9 @@ crc@3.4.0:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/crc/-/crc-3.4.0.tgz#4258e351613a74ef1153dfcb05e820c3e9715d7f"
 
-create-graphql-server-authorization@^0.0.45:
-  version "0.0.45"
-  resolved "https://registry.yarnpkg.com/create-graphql-server-authorization/-/create-graphql-server-authorization-0.0.45.tgz#b871b25281f85044aea8d213ca0091ca1e638655"
+create-graphql-server-authorization@^0.0.46:
+  version "0.0.46"
+  resolved "https://registry.yarnpkg.com/create-graphql-server-authorization/-/create-graphql-server-authorization-0.0.46.tgz#936d0a744f91aa280aede628b35fcaadc3b6068f"
   dependencies:
     assert "^1.4.1"
     babylon "^6.18.0"
@@ -1306,6 +1306,23 @@ create-graphql-server-authorization@^0.0.45:
     recast "^0.12.6"
     winston "^2.3.1"
 
+create-graphql-server-connections@^0.0.6:
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/create-graphql-server-connections/-/create-graphql-server-connections-0.0.6.tgz#fd80b8eee9ca90ec19e1d5a8b1ec6949f31deab0"
+  dependencies:
+    global "^4.3.2"
+    graphql "^0.11.2"
+    iterall "^1.1.0"
+    jwt-simple "^0.5.1"
+    lodash "4.16.4"
+    lodash.clonedeep "^4.5.0"
+    lodash.includes "^4.3.0"
+    lodash.isarraylike "^4.2.0"
+    lodash.isobject "^3.0.2"
+    lodash.merge "^4.6.0"
+    mongodb "^2.2.31"
+    node-fetch "^1.7.2"
+
 create-graphql-server-find-by-ids@^0.0.4:
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/create-graphql-server-find-by-ids/-/create-graphql-server-find-by-ids-0.0.4.tgz#02d35103a55648d5589f0023f242047462396ef6"
@@ -1322,9 +1339,9 @@ create-graphql-server-logging@^0.0.3:
     chai-subset "^1.6.0"
     winston "^2.3.1"
 
-create-graphql-server-query-arguments@^0.0.13:
-  version "0.0.13"
-  resolved "https://registry.yarnpkg.com/create-graphql-server-query-arguments/-/create-graphql-server-query-arguments-0.0.13.tgz#6c1eb3fea879c9f85540a8f1a0d983ce8729c3aa"
+create-graphql-server-query-arguments@^0.0.15:
+  version "0.0.15"
+  resolved "https://registry.yarnpkg.com/create-graphql-server-query-arguments/-/create-graphql-server-query-arguments-0.0.15.tgz#516fbfd34e7e05c7c9d36aa492ae09e9783643a7"
   dependencies:
     global "^4.3.2"
     graphql "^0.11.2"

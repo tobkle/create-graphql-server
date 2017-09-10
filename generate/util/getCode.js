@@ -9,11 +9,8 @@ import {
   ENCODING,
   USER_LITERAL,
   TEMPLATE_EXTENSION,
-  TEMPLATES_DIR,
-  TEMPLATES_MODEL_DIR,
   TEMPLATES_COMMON_DIR,
   TEMPLATES_DEFAULT_DIR,
-  TEMPLATES_AUTH_DIR,
   TEMPLATES_DEFAULT_TEMPLATE,
   MODEL,
   RESOLVER
@@ -24,40 +21,28 @@ import {
  * @public
  * @param {string} codeType - the code to be generated: MODEL || RESOLVER
  * @param {Object} config - configuration object
- * @property {object} inputSchema - schema of the type 
  * @property {string} userType - the user type
+ * @property {object} inputSchema - schema of the type 
+ * @property {array} templatePaths, - paths with templates
  * @property {string} defaultTemplate - name of the start template
- * @property {array} basePath - path to the base templates directory
- * @property {string} baseExtension - file extension '.template'
- * @property {string} baseEncoding - base file encoding 'utf8'
- * @property {string} baseCommonDir - commonly used template partials
- * @property {string} baseDefaultDir - default directory for templates
- * @property {function} baseGetNameFunc - calculate the name of a partial
- * @property {array} authPath - path to the authorization templates directory
- * @property {string} authExtension - auth file encoding 'utf8'
- * @property {string} authEncoding - auth file encoding
- * @property {string} authCommonDir - commonly used auth template partials
- * @property {string} authDefaultDir - default directory for auth templates
- * @property {function} authGetNameFunc - calculate tne name of a partial
+ * @property {string} extension - file extension '.template'
+ * @property {string} encoding - base file encoding 'utf8'
+ * @property {string} commonDir - commonly used template partials
+ * @property {string} defaultDir - default directory for templates
+ * @property {function} getNameFunc - calculate the name of a partial
  * @return {string} code - generated code for a model
  */
 
 export default function getCode(codeType, {
   userType = USER_LITERAL,
   inputSchema = {},
+  templatePaths,
   defaultTemplate = TEMPLATES_DEFAULT_TEMPLATE,
-  basePath = [TEMPLATES_DIR, TEMPLATES_MODEL_DIR, TEMPLATES_DEFAULT_DIR],
-  baseExtension = TEMPLATE_EXTENSION,
-  baseEncoding = ENCODING,
-  baseCommonDir = TEMPLATES_COMMON_DIR,
-  baseDefaultDir = TEMPLATES_DEFAULT_DIR,
-  baseGetNameFunc = getName,
-  authPath = [TEMPLATES_DIR, TEMPLATES_MODEL_DIR, TEMPLATES_AUTH_DIR],
-  authExtension = TEMPLATE_EXTENSION,
-  authEncoding = ENCODING,
-  authCommonDir = TEMPLATES_COMMON_DIR,
-  authDefaultDir = TEMPLATES_DEFAULT_DIR,
-  authGetNameFunc = getName
+  extension = TEMPLATE_EXTENSION,
+  encoding = ENCODING,
+  commonDir = TEMPLATES_COMMON_DIR,
+  defaultDir = TEMPLATES_DEFAULT_DIR,
+  getNameFunc = getName
 }) {
     // partials dictionary for template resolution
     const partials = {};
@@ -77,86 +62,58 @@ export default function getCode(codeType, {
     const context = getContext(inputSchema, userType, codeType);
     const TypeName = context.TypeName;
     const typeName = context.typeName;
-    let startTemplate = typeName;
-    
-    logPath(authPath, authCommonDir);
-    // getting auth common partial templates (might be in an npm module)
-    const authCommonPartials = getPartials({
-      basePath: authPath,
-      directoryPath: [authCommonDir],
-      extension: authExtension,
-      encoding: authEncoding,
-      getNameFunc: authGetNameFunc
-    });
+    let startTemplate = '';
 
-    logPath(authPath, typeName);
-    // getting auth type specific partial templates (might be in an npm module)
-    let authTypePartials = getPartials({
-      basePath: authPath,
-      directoryPath: [typeName],
-      extension: authExtension,
-      encoding: authEncoding,
-      getNameFunc: authGetNameFunc
-    });
+    // Collect all partial templates out of all provided templatePaths
+    templatePaths.forEach((templatePath, index) => {
 
-    // fallback to auth default partial templates (might be in an npm module)
-    if (authTypePartials.length === 0) {
-      logPath(authPath, authDefaultDir);
-      authTypePartials = getPartials({
-        basePath: authPath,
-        directoryPath: [authDefaultDir],
-        extension: authExtension,
-        encoding: authEncoding,
-        getNameFunc: authGetNameFunc
+      // getting partial templates from "common" folder
+      logPath(templatePath, commonDir);
+      const commonPartials = getPartials({
+        basePath: templatePath,
+        directoryPath: [commonDir],
+        extension: extension,
+        encoding: encoding,
+        getNameFunc: getNameFunc
       });
-    }
 
-    logPath(basePath, baseCommonDir);
-    // getting common partial templates
-    const baseCommonPartials = getPartials({
-      basePath,
-      directoryPath: [baseCommonDir],
-      extension: baseExtension,
-      encoding: baseEncoding,
-      getNameFunc: baseGetNameFunc
-    });
-
-    logPath(basePath, typeName);
-    // getting type specific partial templates
-    let baseTypePartials = getPartials({
-      basePath,
-      directoryPath: [typeName],
-      extension: baseExtension,
-      encoding: baseEncoding,
-      getNameFunc: baseGetNameFunc
-    });
-
-    // fallback to default partial templates, 
-    // if there are no type specific templates found
-    if (baseTypePartials.length === 0) {
-      logPath(basePath, baseDefaultDir);
-      baseTypePartials = getPartials({
-        basePath,
-        directoryPath: [baseDefaultDir],
-        extension: baseExtension,
-        encoding: baseEncoding,
-        getNameFunc: baseGetNameFunc
+      // getting partial templates from "<type>" folder
+      logPath(templatePath, typeName);
+      let typePartials = getPartials({
+        basePath: templatePath,
+        directoryPath: [typeName],
+        extension: extension,
+        encoding: encoding,
+        getNameFunc: getNameFunc
       });
-      // reset start template to the default template,
-      // as type specific template does not exist
-      startTemplate = defaultTemplate;
-    }
 
-    // compile all auth partials
-    compile(authCommonPartials);
-    compile(authTypePartials);
+      // assuming, we start with the type name's template
+      startTemplate = typeName
 
-    // compile all base partials
-    compile(baseCommonPartials);
-    compile(baseTypePartials);
+      // fallback to partial templates in "default" folder
+      if (typePartials.length === 0) {
+        logPath(templatePath, defaultDir);
+        typePartials = getPartials({
+          basePath: templatePath,
+          directoryPath: [defaultDir],
+          extension: extension,
+          encoding: encoding,
+          getNameFunc: getNameFunc
+        });
+        // reset start template to the default template,
+        // as <type> specific template does not exist
+        startTemplate = defaultTemplate;
+      }
 
-    console.log('Found the following templates:', JSON.stringify(Object.keys(partials), null, 2));
-    console.log(`Generating ${codeType} for type "${TypeName}" with template "${startTemplate}"`);
+      // compile partials
+      compile(commonPartials);
+      compile(typePartials);
+    });
+
+    console.log('Found the following templates:', 
+      JSON.stringify(Object.keys(partials), null, 2));
+    console.log(`Generating ${codeType} for type "${
+      TypeName}" with template "${startTemplate}"`);
 
     // run start template with data context
     const code = partials[startTemplate](context);
@@ -169,6 +126,8 @@ export default function getCode(codeType, {
  * registers a helper, which could be used in the templates
  * @example
  * {{#foreach}}
+ *     {{#if $first}} console.log('this was the last element') {{/if}}
+ *     {{#if $notFirst}} console.log('this was not the last one') {{/if}}
  *     {{#if $last}} console.log('this was the last element') {{/if}}
  *     {{#if $notLast}} console.log('this was not the last one') {{/if}}
  * {{/foreach}}
@@ -192,6 +151,10 @@ function registerHandlebarsHelpers() {
       .join('');
   });
 }
+
+/**
+ * log the given path for easier failure analysis
+ */
 
 function logPath(abspath, dir) {
   const directory = path.join(...abspath, dir);

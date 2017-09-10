@@ -22,18 +22,8 @@ resolvers.ObjID = new GraphQLScalarType({
   },
 });
 
-// PAGEINFO =====================
-resolvers.PageInfo = {
-  
-  hasPreviousPage(pageInfo, args, { PageInfo, me }) {
-    return pageInfo.hasPreviousPage;
-  },
-
-  hasNextPage(pageInfo, args, { PageInfo, me }) {
-    return pageInfo.hasNextPage;
-  }
-}
-// PAGEINFO ======================
+import { connectionResolvers } from 'create-graphql-server-connections';
+merge(resolvers, connectionResolvers.pageInfo);
 
 export default resolvers;
 

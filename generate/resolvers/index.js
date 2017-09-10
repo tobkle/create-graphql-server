@@ -3,6 +3,7 @@
  import { templateToAst } from '../util/read';
  import { RESOLVER } from '../util/constants';
  import { modulePath } from 'create-graphql-server-authorization';
+ import { templates } from 'create-graphql-server-connections';
 
 export default function generateResolvers(inputSchema) {
   const ast = generateResolversAst(inputSchema)
@@ -10,10 +11,16 @@ export default function generateResolvers(inputSchema) {
 }
 
 export function generateResolversAst(inputSchema) {
+  // the last template path, determines the start template: type/default
+  // the last path has the highest priority and may overwrite
+  // partial templates, if they have equal names
   const templateCode = getCode(RESOLVER, {
     inputSchema,
-    basePath: [__dirname, 'templates'],
-    authPath: [modulePath, 'templates','resolver', 'auth']
+    templatePaths: [
+      templates.resolvers,
+      [modulePath, 'templates','resolver', 'auth'],
+      [__dirname, 'templates'],
+    ]
   });
 
   // validate syntax of generated template code

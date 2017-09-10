@@ -32,9 +32,7 @@ export default class {{TypeName}} {
 {{#each singularFields }}
 {{> defaultSingularField }}
 {{/each}}
-{{#each paginatedFields }}
-{{> defaultPaginatedField }}
-{{/each}}
+{{> connectionPaginatedFields}}
 
   async insert(doc) {
     const docToInsert = Object.assign({}, doc, {

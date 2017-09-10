@@ -1,17 +1,19 @@
 type Tweet implements Node {
   id: ObjID!
   author: User
-  coauthors(lastCreatedAt: Float, limit: Int): [User]
+  coauthors(lastCreatedAt: Float, limit: Int, skip: Int, filter: UserFilter, orderBy: [UserOrderBy!]): [User]
   body: String
-  likers(lastCreatedAt: Float, limit: Int): [User]
+  likers(lastCreatedAt: Float, limit: Int, skip: Int, filter: UserFilter, orderBy: [UserOrderBy!]): [User]
   createdAt: Float!
   updatedAt: Float!
   createdBy: User
   updatedBy: User
+  coauthorsConnection(filter: UserFilter, orderBy: [UserOrderBy!], first: Int, last: Int, before: Float, after: Float): TweetUsersConnection
+  likersConnection(filter: UserFilter, orderBy: [UserOrderBy!], first: Int, last: Int, before: Float, after: Float): TweetUsersConnection
 }
 
 extend type Query {
-  tweets(lastCreatedAt: Float, limit: Int, skip: Int, filter: TweetFilter, orderBy: [TweetOrderBy!]): [Tweet!]
+  tweets(lastCreatedAt: Float, limit: Int, skip: Int, filter: TweetFilter, orderBy: [TweetOrderBy!], first: Int, last: Int, before: Float, after: Float): [Tweet!]
   tweet(id: ObjID!): Tweet
 }
 
@@ -118,4 +120,14 @@ enum TweetSort {
 input TweetOrderBy {
   sort: TweetSort!
   direction: Direction = ASC
+}
+
+type TweetUsersEdge {
+  cursor: Float!
+  node: User
+}
+
+type TweetUsersConnection {
+  edges: [TweetUsersEdge]
+  pageInfo: PageInfo!
 }

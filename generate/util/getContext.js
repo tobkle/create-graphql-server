@@ -5,6 +5,10 @@ import {
   isAuthorizeDirectiveDefined
 } from 'create-graphql-server-authorization';
 
+import {
+  getPaginationContext
+} from 'create-graphql-server-connections';
+
 import { lcFirst, ucFirst } from './capitalization';
 import generatePerField from './generatePerField';
 
@@ -16,7 +20,12 @@ import {
   PAGINATED,
   MODEL,
   RESOLVER,
-  SCHEMA
+  SCHEMA,
+  PAGINATION_DIRECTIVE, 
+  PAGINATION_BY, 
+  PAGINATION_BOTH, 
+  PAGINATION_SIMPLE, 
+  PAGINATION_CURSOR 
  } from './constants';
 
 /**
@@ -47,6 +56,8 @@ export default function getContext(
   // for field generation
   // prepare template context for later compilation
   const authorize = isAuthorizeDirectiveDefined(inputSchema);
+  
+  const isConnection = true;
 
   // read TypeName out of inputSchema
   const TypeName = inputSchema.definitions[0].name.value;
@@ -93,7 +104,8 @@ export default function getContext(
     firstUserRole,
     roleField,
     singularFields,
-    paginatedFields
+    paginatedFields,
+    ...getPaginationContext(inputSchema)
   };
 }
 
@@ -185,6 +197,7 @@ function getFields(inputSchema, codeType) {
  * @property {string} argsString - argument string for parameters
  * @property {string} argsFields - fields to pass on to the association
  * @property {string} query - which fields to query during association
+ * @property {boolean} isConnection - true, on cursor based connection
  */
 
 function buildFieldContext(fieldType, { 

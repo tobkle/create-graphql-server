@@ -12,7 +12,10 @@ export {
   FIELD_DEFINITION,
   DIRECTIVE,
   LIST,
-  STRING
+  STRING,
+  DOCUMENT,
+  OBJECT_TYPE_DEFINITION,
+  TYPE_EXTENSION_DEFINITION  
 } from 'graphql/language/kinds';
 
 // files encoding
@@ -37,6 +40,14 @@ export const PAGINATED = 'paginated';
 
 // name of the @authorize directive, which triggers authorization logic
 export const AUTHORIZE_DIRECTIVE = 'authorize';
+
+// name of the @paginate directive, which triggers pagination logic
+export const PAGINATION_DIRECTIVE = 'paginate';
+export const PAGINATION_BY = 'by';
+export const PAGINATION_BOTH = 'both';
+export const PAGINATION_SIMPLE = 'simple';
+export const PAGINATION_CURSOR = 'cursor';
+export const QUERY = 'Query';
 
 // authorization modes
 export const CREATE = 'create';

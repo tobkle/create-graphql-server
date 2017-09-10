@@ -1,37 +1,6 @@
 /* eslint-disable prettier */
 /* eslint comma-dangle: [2, "only-multiline"] */
 const resolvers = {
-
-  UserFriendsEdge: {
-    node(edge, args, { User, me})  {
-      return edge.node;
-    },
-
-    cursor(edge, args, { User, me})  {
-      return edge.cursor;
-    }
-  },
-
-  UserFriendsConnection: {
-    edges(conn, args, { User, me }) {
-      return conn.edges;
-    },
-
-    pageInfo(conn, args, { User, me }) {
-      return conn.pageInfo;
-    },
-  },
-
-  UserTweetEdge: {
-    node(edge, args, { User, me})  {
-      return edge.node;
-    },
-
-    cursor(edge, args, { User, me})  {
-      return edge.cursor;
-    }
-  },
-
   UserTweetsConnection: {
     edges(conn, args, { User, me }) {
       return conn.edges;
@@ -41,7 +10,15 @@ const resolvers = {
       return conn.pageInfo;
     },
   },
+  UserTweetsEdge: {
+    node(edge, args, { User, me})  {
+      return edge.node;
+    },
 
+    cursor(edge, args, { User, me})  {
+      return edge.cursor;
+    }
+  },
   User: {
     id(user) {
       return user._id;
@@ -51,16 +28,36 @@ const resolvers = {
       return User.tweets(user, args, me, 'user tweets');
     },
 
+    async tweetsConnection(user, args, { User, me}) {
+      const edges = await User.tweets(user, args, me, 'user tweets');
+      return User.context.paginate(edges, args);
+    },
+
     liked(user, args, { User, me }) {
       return User.liked(user, args, me, 'user liked');
+    },
+
+    async likedConnection(user, args, { User, me}) {
+      const edges = await User.liked(user, args, me, 'user liked');
+      return User.context.paginate(edges, args);
     },
 
     following(user, args, { User, me }) {
       return User.following(user, args, me, 'user following');
     },
 
+    async followingConnection(user, args, { User, me}) {
+      const edges = await User.following(user, args, me, 'user following');
+      return User.context.paginate(edges, args);
+    },
+
     followers(user, args, { User, me }) {
       return User.followers(user, args, me, 'user followers');
+    },
+
+    async followersConnection(user, args, { User, me}) {
+      const edges = await User.followers(user, args, me, 'user followers');
+      return User.context.paginate(edges, args);
     },
 
     createdBy(user, args, { User, me }) {
@@ -69,20 +66,6 @@ const resolvers = {
 
     updatedBy(user, args, { User, me }) {
       return User.updatedBy(user, me, 'user updatedBy');
-    },
-
-    async tweetsConnection(user, args, { User, me}) {
-      const pagination = User.context.cursorBasedPagination;
-      pagination.checkArguments(args);
-      const edges = await User.tweets(user, args, me, 'user tweetsConnection');
-      return pagination.get(edges, args);
-    },
-
-    async friendsConnection(user, args, { User, me}) {
-      const pagination = User.context.cursorBasedPagination;
-      pagination.checkArguments(args);
-      const edges = await User.find(args, me, 'user friendsConnection')
-      return pagination.get(edges, args);
     }
   },
   Query: {

@@ -1,6 +1,24 @@
 /* eslint-disable prettier */
 /* eslint comma-dangle: [2, "only-multiline"] */
 const resolvers = {
+  TweetUsersConnection: {
+    edges(conn, args, { Tweet, me }) {
+      return conn.edges;
+    },
+
+    pageInfo(conn, args, { Tweet, me }) {
+      return conn.pageInfo;
+    },
+  },
+  TweetUsersEdge: {
+    node(edge, args, { Tweet, me})  {
+      return edge.node;
+    },
+
+    cursor(edge, args, { Tweet, me})  {
+      return edge.cursor;
+    }
+  },
   Tweet: {
     id(tweet) {
       return tweet._id;
@@ -14,8 +32,18 @@ const resolvers = {
       return Tweet.coauthors(tweet, args, me, 'tweet coauthors');
     },
 
+    async coauthorsConnection(tweet, args, { Tweet, me}) {
+      const edges = await Tweet.coauthors(tweet, args, me, 'tweet coauthors');
+      return Tweet.context.paginate(edges, args);
+    },
+
     likers(tweet, args, { Tweet, me }) {
       return Tweet.likers(tweet, args, me, 'tweet likers');
+    },
+
+    async likersConnection(tweet, args, { Tweet, me}) {
+      const edges = await Tweet.likers(tweet, args, me, 'tweet likers');
+      return Tweet.context.paginate(edges, args);
     },
 
     createdBy(tweet, args, { Tweet, me }) {

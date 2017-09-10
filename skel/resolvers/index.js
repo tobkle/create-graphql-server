@@ -22,4 +22,7 @@ resolvers.ObjID = new GraphQLScalarType({
   },
 });
 
+import { connectionResolvers } from 'create-graphql-server-connections';
+merge(resolvers, connectionResolvers.pageInfo);
+
 export default resolvers;

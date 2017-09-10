@@ -1,11 +1,11 @@
 type Tweet 
-
 @authorize(
   admin: ["create", "read", "update", "delete"], 
   author: ["create", "read", "update", "delete"], 
   coauthors: ["read", "update"],
   world: ["read"]
 )
+@paginate(by: "both")
 
 {
   author: User @unmodifiable @belongsTo @authRole(for: ["author"])

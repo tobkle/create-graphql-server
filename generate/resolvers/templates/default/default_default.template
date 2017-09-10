@@ -1,6 +1,7 @@
 /* eslint-disable prettier */
 /* eslint comma-dangle: [2, "only-multiline"] */
 const resolvers = {
+{{> connectionTypes}}
   {{TypeName}}: {
     id({{typeName}}) {
       return {{typeName}}._id;
@@ -8,9 +9,8 @@ const resolvers = {
 {{#each singularFields}}
 {{> defaultSingularField }}
 {{/each}}
-{{#each paginatedFields}}
-{{> defaultPaginatedField }}
-{{/each}}
+{{> connectionPaginatedFields}}
+
   },
   Query: {
     {{typeName}}s(root, args, { {{TypeName}}, me }) {

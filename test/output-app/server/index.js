@@ -11,7 +11,7 @@ import morgan from 'morgan';
 import { findByIds } from 'create-graphql-server-find-by-ids';
 import { getLogFilename, logger } from 'create-graphql-server-logging';
 import { prepareQueries } from 'create-graphql-server-query-arguments';
-import cursorBasedPagination from './cursorBasedPagination';
+import { paginate } from 'create-graphql-server-connections';
 import typeDefs from '../schema';
 import resolvers from '../resolvers';
 import addModelsToContext from '../model';
@@ -51,7 +51,7 @@ async function startServer() {
   app.use('/graphql', (req, res, next) => {
     passport.authenticate('jwt', { session: false }, (err, me) => {
       req.context = addModelsToContext({ 
-        db, pubsub, me, UserCollection, findByIds, log, prepareQueries, cursorBasedPagination
+        db, pubsub, me, UserCollection, findByIds, log, prepareQueries, paginate
       });
       graphqlExpress(() => {
         // Get the query, the same way express-graphql does it

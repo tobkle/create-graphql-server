@@ -32,6 +32,7 @@ echo "running tests"
 
 # Test only specific test files...
 # $MOCHA "$TEST_DIR/test-1-roles.js"
+# $MOCHA "$TEST_DIR/test-2-queries-with-user-role-admin-cursor.js"
 # $MOCHA "$TEST_DIR/test-2-queries-with-user-role-admin.js"
 # $MOCHA "$TEST_DIR/test-3-mutations-with-user-role-admin.js"
 # $MOCHA "$TEST_DIR/test-4-mutations-with-unknown-user.js"

@@ -1,7 +1,8 @@
 import { Kind } from 'graphql';
 import includes from 'lodash.includes';
 
-export const SCALAR_TYPE_NAMES = ['Int', 'Float', 'String', 'Boolean', 'ID'];
+export const SCALAR_TYPE_NAMES = ['Int', 'Float', 'String', 'Boolean', 'ID',
+  'ObjID'];
 
 export function getBaseType(type) {
   if (type.kind === 'ListType' || type.kind === 'NonNullType') {

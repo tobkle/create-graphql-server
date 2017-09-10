@@ -57,22 +57,16 @@ export default class Tweet {
     );
   }
 
-  coauthors(tweet, { lastCreatedAt = 0, limit = 10 }, me, resolver) {
+  coauthors(tweet, args, me, resolver) {
     const baseQuery = { _id: { $in: tweet.coauthorsIds || [] } };
-    return this.context.User.find(
-      { baseQuery, lastCreatedAt, limit },
-      me,
-      resolver
-    );
+    const finalQuery = { ...args, baseQuery};
+    return this.context.User.find(finalQuery, me, resolver);
   }
 
-  likers(tweet, { lastCreatedAt = 0, limit = 10 }, me, resolver) {
+  likers(tweet, args, me, resolver) {
     const baseQuery = { likedIds: tweet._id };
-    return this.context.User.find(
-      { baseQuery, lastCreatedAt, limit },
-      me,
-      resolver
-    );
+    const finalQuery = { ...args, baseQuery};
+    return this.context.User.find(finalQuery, me, resolver);
   }
 
   createdBy(tweet, me, resolver) {

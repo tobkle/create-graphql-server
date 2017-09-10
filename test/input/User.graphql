@@ -5,6 +5,8 @@ type User
   this: ["create", "read", "update", "delete"]
 )
 
+@paginate(by: "both")
+
 {
   role: String @authRole(for: ["admin"])
   email: String!
