@@ -38,7 +38,7 @@
   "dependencies": {
     "bcrypt": "^1.0.2",
     "body-parser": "1.15.2",
-    "cors": "^2.8.1",
+    "cors": "^2.8.4",
     "create-graphql-server-authorization": "^0.0.46",
     "create-graphql-server-connections": "^0.0.6",
     "create-graphql-server-find-by-ids": "^0.0.4",
@@ -58,6 +58,7 @@
     "lodash": "4.16.4",
     "mongodb": "^2.2.11",
     "morgan": "^1.8.2",
+    "multer": "^1.3.0",
     "nodeify": "^1.0.1",
     "passport": "^0.3.2",
     "passport-jwt": "^2.2.1",

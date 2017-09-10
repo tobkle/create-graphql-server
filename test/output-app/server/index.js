@@ -19,12 +19,26 @@ import authenticate from './authenticate';
 import { parse, print } from 'graphql';
 import { pubsub, subscriptionManager } from './subscriptions';
 
+// file uploader
+import multer from 'multer';
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, 'uploads')
+//   },
+//   filename: function (req, file, cb) {
+//     cb(null, file.fieldname + '-' + Date.now())
+//   }
+// });
+// const upload = multer({ storage: storage });
+const upload = multer({dest: './'});
+
 const log = logger(getLogFilename());
 const stream = {
     write: function(message, encoding) {
       // log.debug(message);
     }
 };
+
 const schema = makeExecutableSchema({ typeDefs, resolvers });
 
 const {
@@ -37,7 +51,7 @@ const {
 
 async function startServer() {
   log.info('Logger started');
-
+debugger;
   const db = await MongoClient.connect(MONGO_URL);
   const UserCollection = db.collection('user');
 
@@ -47,6 +61,18 @@ async function startServer() {
   app.use(morgan("dev", { "stream": stream }));
 
   authenticate(app, UserCollection);
+
+  const upload = multer({dest: 'uploads/'});
+  const type = upload.single('file');
+
+  app.post('/upload', type, function (req, res, next) {
+    debugger;
+    // req.body contains the text fields
+    console.log(
+      JSON.stringify(req.body, null, 2), 
+      JSON.stringify(req.files, null, 2)
+    );
+  });
 
   app.use('/graphql', (req, res, next) => {
     passport.authenticate('jwt', { session: false }, (err, me) => {
@@ -83,6 +109,7 @@ async function startServer() {
   app.use('/graphiql', graphiqlExpress({
     endpointURL: '/graphql',
   }));
+
 
   app.listen(PORT, () => console.log(
     `API Server is now running on http://localhost:${PORT}`
